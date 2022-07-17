@@ -1,7 +1,8 @@
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, TextField } from '@mui/material'
-import { useCallback, useState, ChangeEvent } from 'react'
+import { ChangeEvent, useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
+
 import { registration } from '../api/auth'
 import { useAppContext } from '../context'
 

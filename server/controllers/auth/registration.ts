@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import cookie from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
+
 import { RegistrationReq, RegistrationRes } from '../../../dtos/auth'
 import { Error } from '../../../dtos/error'
 import { PublicUserData } from '../../../dtos/user'

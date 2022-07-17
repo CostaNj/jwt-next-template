@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+
 import { Token } from '../../dtos/token'
 import { PublicUserData } from '../../dtos/user'
 

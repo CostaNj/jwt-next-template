@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+
 import { PublicUserData } from '../../dtos/user'
 
 type AppContext = {

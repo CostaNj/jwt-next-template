@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app'
 import { QueryClient, QueryClientProvider } from 'react-query'
+
 import { ContextProvider } from '../client/context'
 
 const queryClient = new QueryClient({
