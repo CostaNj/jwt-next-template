@@ -1,4 +1,4 @@
-import { PublicUserData } from "./user"
+import { PublicUserData } from './user'
 
 export type RegistrationReq = {
   email: string
@@ -6,6 +6,6 @@ export type RegistrationReq = {
 }
 
 export type RegistrationRes = {
-  user: PublicUserData,
+  user: PublicUserData
   accessToken: string
 }

@@ -1,8 +1,8 @@
-import { useCallback, useState, ChangeEvent } from 'react'
-import { Box, TextField } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { Box, TextField } from '@mui/material'
+import { useCallback, useState, ChangeEvent } from 'react'
 import { useQuery } from 'react-query'
-import { registration } from "../api/auth"
+import { registration } from '../api/auth'
 import { useAppContext } from '../context'
 
 export const LoginForm = () => {
@@ -17,12 +17,13 @@ export const LoginForm = () => {
       onSuccess: (response) => {
         const token = response?.data?.accessToken
         const user = response?.data?.user
-        if(token && user) {
+        if (token && user) {
           localStorage.setItem('token', token)
           setUserData(user)
         }
       }
-    })
+    }
+  )
 
   const handleClickRegistration = useCallback(() => {
     refetch()
@@ -36,7 +37,7 @@ export const LoginForm = () => {
     setPassword(event.target.value)
   }
 
-  return(
+  return (
     <Box
       sx={{
         width: 300,
@@ -97,7 +98,6 @@ export const LoginForm = () => {
           Registration
         </LoadingButton>
       </Box>
-
     </Box>
   )
 }
