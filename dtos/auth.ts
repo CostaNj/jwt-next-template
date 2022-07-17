@@ -1,5 +1,4 @@
-import { User } from "./user"
-import { Token } from "./token"
+import { PublicUserData } from "./user"
 import { Error } from "./error"
 
 export type RegistrationReq = {
@@ -7,4 +6,4 @@ export type RegistrationReq = {
   password: string
 }
 
-export type RegistrationRes = { user: User } & Token | Error
+export type RegistrationRes = { user: PublicUserData, accessToken: string } | Error

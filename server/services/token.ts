@@ -12,9 +12,9 @@ export const generateTokens = (user: PublicUserData): Token | null => {
       data: user
     }, accessSecret)
 
-    //Signing a token with 30 days  of expiration:
     const refreshToken = jwt.sign({
-      exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7 * 30),
+      //Signing a token with 30 days of expiration:
+      exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 30),
       data: user
     }, refreshSecret);
 
