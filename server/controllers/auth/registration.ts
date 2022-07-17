@@ -2,13 +2,14 @@ import bcrypt from 'bcrypt'
 import cookie from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { RegistrationReq, RegistrationRes } from '../../../dtos/auth'
+import { Error } from '../../../dtos/error'
 import { PublicUserData } from '../../../dtos/user'
 import { User } from '../../models/user'
 import { Token } from '../../models/token'
 import { generateTokens } from '../../services/token'
 import { getUserDevice } from '../../utils/user-agent-parser'
 
-export const registration = async (req: NextApiRequest, res: NextApiResponse<RegistrationRes>) => {
+export const registration = async (req: NextApiRequest, res: NextApiResponse<RegistrationRes | Error>) => {
 
   const data: RegistrationReq = req.body
 
