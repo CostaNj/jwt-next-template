@@ -14,6 +14,7 @@ export const registration = async (
   req: NextApiRequest,
   res: NextApiResponse<RegistrationRes | Error>
 ) => {
+  // TODO: validation
   const data: RegistrationReq = req.body
 
   try {

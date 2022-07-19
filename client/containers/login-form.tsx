@@ -3,7 +3,7 @@ import { Box, TextField } from '@mui/material'
 import { ChangeEvent, useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
 
-import { registration } from '../api/auth'
+import { registration, login } from '../api/auth'
 import { useAppContext } from '../context'
 
 export const LoginForm = () => {
@@ -26,9 +26,28 @@ export const LoginForm = () => {
     }
   )
 
+  const { refetch: loginRefetch, isLoading: loginLoading } = useQuery(
+    'login',
+    async () => await login(email, password),
+    {
+      onSuccess: (response) => {
+        const token = response?.data?.accessToken
+        const user = response?.data?.user
+        if (token && user) {
+          localStorage.setItem('token', token)
+          setUserData(user)
+        }
+      }
+    }
+  )
+
   const handleClickRegistration = useCallback(() => {
     refetch()
   }, [email, password, isLoading, refetch])
+
+  const handleClickLogin = useCallback(() => {
+    loginRefetch()
+  }, [email, password, loginLoading, loginRefetch])
 
   const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
@@ -82,6 +101,8 @@ export const LoginForm = () => {
       >
         <LoadingButton
           size="small"
+          onClick={handleClickLogin}
+          loading={loginLoading}
           loadingIndicator="Loading…"
           variant="outlined"
           sx={{ height: '30px' }}
