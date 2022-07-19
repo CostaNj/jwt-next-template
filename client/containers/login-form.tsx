@@ -3,7 +3,7 @@ import { Box, TextField } from '@mui/material'
 import { ChangeEvent, useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
 
-import { registration, login } from '../api/auth'
+import { login, registration } from '../api/auth'
 import { useAppContext } from '../context'
 
 export const LoginForm = () => {

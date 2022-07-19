@@ -20,8 +20,11 @@ export const login = async (
   try {
     const user = await User.findOne({ where: { email: data?.email } })
     if (user) {
-      const isEqualPassword = await bcrypt.compare(data?.password.toString(), user.getDataValue('password'))
-      if(isEqualPassword) {
+      const isEqualPassword = await bcrypt.compare(
+        data?.password.toString(),
+        user.getDataValue('password')
+      )
+      if (isEqualPassword) {
         const publicUserData: PublicUserData = {
           id: user.getDataValue('id'),
           email: user.getDataValue('email')
@@ -36,7 +39,7 @@ export const login = async (
             token: tokens.refreshToken,
             device
           }
-          const [ token, created ] = await Token.findOrCreate({
+          const [token, created] = await Token.findOrCreate({
             where: {
               userId: user.getDataValue('id'),
               device
@@ -44,23 +47,19 @@ export const login = async (
             defaults: newTokenData
           })
 
-          if(!created) {
+          if (!created) {
             await token.set(newTokenData)
           }
 
           res.setHeader('Set-Cookie', [
-            cookie.serialize(
-              'refreshToken',
-              tokens.refreshToken,
-              {
-                httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
-                //Token with 30 days of expiration:
-                maxAge: 60 * 60 * 24 * 30,
-                sameSite: 'strict',
-                path: '/'
-              }
-            )
+            cookie.serialize('refreshToken', tokens.refreshToken, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV !== 'development',
+              //Token with 30 days of expiration:
+              maxAge: 60 * 60 * 24 * 30,
+              sameSite: 'strict',
+              path: '/'
+            })
           ])
 
           res.status(200).json({
@@ -74,14 +73,10 @@ export const login = async (
             .json({ message: 'Something went wrong, try again later' })
         }
       } else {
-        res
-          .status(400)
-          .json({ message: 'Wrong password' })
+        res.status(400).json({ message: 'Wrong password' })
       }
     } else {
-      res
-        .status(400)
-        .json({ message: 'There is no user with this email' })
+      res.status(400).json({ message: 'There is no user with this email' })
     }
   } catch (error) {
     console.log(error)
