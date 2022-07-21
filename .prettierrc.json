@@ -1,0 +1,9 @@
+{
+  "singleQuote": true,
+  "arrowParens": "always",
+  "semi": false,
+  "trailingComma": "none",
+  "importOrder": ["<THIRD_PARTY_MODULES>", "^[./]", "^[../]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}
