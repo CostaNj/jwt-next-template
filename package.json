@@ -24,7 +24,8 @@
     "react-device-detect": "2.2.2",
     "react-dom": "18.2.0",
     "react-query": "3.39.1",
-    "sequelize": "6.21.3"
+    "sequelize": "6.21.3",
+    "validator": "13.7.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "3.2.0",

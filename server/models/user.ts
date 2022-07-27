@@ -11,10 +11,7 @@ export const User = sequelize.define(
       primaryKey: true
     },
     email: {
-      type: DataTypes.STRING,
-      validate: {
-        isEmail: true
-      }
+      type: DataTypes.STRING
     },
     password: {
       type: DataTypes.STRING

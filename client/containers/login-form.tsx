@@ -5,13 +5,17 @@ import { useQuery } from 'react-query'
 
 import { login, registration } from '../api/auth'
 import { useAppContext } from '../context'
+import { AxiosError, AxiosResponse } from 'axios'
+import { errorHandler } from '../utils/error-handlers'
 
 export const LoginForm = () => {
   const { setUserData } = useAppContext()
   const [email, setEmail] = useState<string>('test@test6.ru')
+  const [emailError, setEmailError] = useState<string>('')
   const [password, setPassword] = useState<string>('test')
+  const [passwordError, setPasswordError] = useState<string>('')
 
-  const { refetch, isLoading } = useQuery(
+  const { refetch, isLoading } = useQuery<AxiosResponse, AxiosError>(
     'registration',
     async () => await registration(email, password),
     {
@@ -21,8 +25,14 @@ export const LoginForm = () => {
         if (token && user) {
           localStorage.setItem('token', token)
           setUserData(user)
+          setEmail('')
+          setPassword('')
         }
-      }
+      },
+      onError: errorHandler([
+        {fieldName: 'email', setError: setEmailError},
+        {fieldName: 'password', setError: setPasswordError}
+      ])
     }
   )
 
@@ -51,10 +61,12 @@ export const LoginForm = () => {
 
   const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
+    setEmailError('')
   }
 
   const handleChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value)
+    setPasswordError('')
   }
 
   return (
@@ -80,6 +92,8 @@ export const LoginForm = () => {
         value={email}
         onChange={handleChangeEmail}
         sx={{ width: '100%' }}
+        error={!!emailError}
+        helperText={emailError}
       />
       <TextField
         id="password-input"
@@ -89,6 +103,8 @@ export const LoginForm = () => {
         value={password}
         onChange={handleChangePassword}
         sx={{ width: '100%' }}
+        error={!!passwordError}
+        helperText={passwordError}
       />
       <Box
         sx={{

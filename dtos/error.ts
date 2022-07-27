@@ -1,4 +1,9 @@
+export type ValidationError = {
+  message: string
+  fieldName: string
+}
+
 export type Error = {
   message: string
-  type?: string
+  validationErrors?: ValidationError[]
 }
