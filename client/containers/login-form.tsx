@@ -1,11 +1,11 @@
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, TextField } from '@mui/material'
+import { AxiosError, AxiosResponse } from 'axios'
 import { ChangeEvent, useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
 
 import { login, registration } from '../api/auth'
 import { useAppContext } from '../context'
-import { AxiosError, AxiosResponse } from 'axios'
 import { errorHandler } from '../utils/error-handlers'
 
 export const LoginForm = () => {
@@ -30,8 +30,8 @@ export const LoginForm = () => {
         }
       },
       onError: errorHandler([
-        {fieldName: 'email', setError: setEmailError},
-        {fieldName: 'password', setError: setPasswordError}
+        { fieldName: 'email', setError: setEmailError },
+        { fieldName: 'password', setError: setPasswordError }
       ])
     }
   )

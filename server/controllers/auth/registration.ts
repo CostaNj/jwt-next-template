@@ -1,15 +1,15 @@
 import bcrypt from 'bcrypt'
 import cookie from 'cookie'
-import {NextApiRequest, NextApiResponse} from 'next'
-
-import {RegistrationReq, RegistrationRes} from '../../../dtos/auth'
-import { Error } from '../../../dtos/error'
-import {PublicUserData} from '../../../dtos/user'
-import {Token} from '../../models/token'
-import {User} from '../../models/user'
-import {generateTokens} from '../../services/token'
-import {getUserDevice} from '../../utils/user-agent-parser'
+import { NextApiRequest, NextApiResponse } from 'next'
 import validator from 'validator'
+
+import { RegistrationReq, RegistrationRes } from '../../../dtos/auth'
+import { Error } from '../../../dtos/error'
+import { PublicUserData } from '../../../dtos/user'
+import { Token } from '../../models/token'
+import { User } from '../../models/user'
+import { generateTokens } from '../../services/token'
+import { getUserDevice } from '../../utils/user-agent-parser'
 import { validateBuilder } from '../../utils/validation'
 
 export const registration = async (
@@ -19,15 +19,25 @@ export const registration = async (
   // TODO: validation
   const data: RegistrationReq = req.body
 
-  const email = validateBuilder('email', data?.email, validator.isEmail, 'Please, enter correct email')
-  const password = validateBuilder('password', data?.password, validator.isStrongPassword,'Please, enter strong password')
+  const email = validateBuilder(
+    'email',
+    data?.email,
+    validator.isEmail,
+    'Please, enter correct email'
+  )
+  const password = validateBuilder(
+    'password',
+    data?.password,
+    validator.isStrongPassword,
+    'Please, enter strong password'
+  )
 
   if (!email.isValid || !password.isValid) {
     res.status(400).json({
       message: 'Validation error',
       validationErrors: [email, password]
-        .filter(validationResult => !validationResult.isValid)
-        .map(validationResult => ({
+        .filter((validationResult) => !validationResult.isValid)
+        .map((validationResult) => ({
           fieldName: validationResult.fieldName,
           message: validationResult.message
         }))

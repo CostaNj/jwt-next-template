@@ -4,7 +4,12 @@ type Validator = {
   message: string
 }
 
-export const validateBuilder = (fieldName: string, value: string, validate: (str: string) => boolean, message: string): Validator => ({
+export const validateBuilder = (
+  fieldName: string,
+  value: string,
+  validate: (str: string) => boolean,
+  message: string
+): Validator => ({
   fieldName,
   isValid: validate(value),
   message

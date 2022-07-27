@@ -1,21 +1,25 @@
-import {Error, ValidationError} from '../../dtos/error'
-import {AxiosError} from "axios";
+import { AxiosError } from 'axios'
+
+import { Error, ValidationError } from '../../dtos/error'
 
 type Field = {
   fieldName: string
   setError: (message: string) => void
 }
 
-export const validationErrorHandler = (fields: Field[], errors: ValidationError[]) => {
-  errors.forEach(error => {
-    const field = fields.find(field => field.fieldName === error.fieldName)
-    if(field && error.message) {
+export const validationErrorHandler = (
+  fields: Field[],
+  errors: ValidationError[]
+) => {
+  errors.forEach((error) => {
+    const field = fields.find((field) => field.fieldName === error.fieldName)
+    if (field && error.message) {
       field.setError(error.message)
     }
   })
 }
 
-export const errorHandler = (fields?: Field[]) => (axiosError: AxiosError, ) => {
+export const errorHandler = (fields?: Field[]) => (axiosError: AxiosError) => {
   if (axiosError) {
     const status = axiosError?.response?.status
     const error = axiosError?.response?.data as Error
