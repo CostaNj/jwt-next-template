@@ -1,8 +1,9 @@
+import { ChangeEvent, useCallback, useState } from 'react'
+import { AxiosError, AxiosResponse } from 'axios'
+import { useQuery } from 'react-query'
+import { useRouter } from 'next/router'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, TextField } from '@mui/material'
-import { AxiosError, AxiosResponse } from 'axios'
-import { ChangeEvent, useCallback, useState } from 'react'
-import { useQuery } from 'react-query'
 
 import { login, registration } from '../api/auth'
 import { useAppContext } from '../context'
@@ -10,6 +11,7 @@ import { errorHandler } from '../utils/error-handlers'
 
 export const LoginForm = () => {
   const { setUserData } = useAppContext()
+  const router = useRouter()
   const [email, setEmail] = useState<string>('test@test6.ru')
   const [emailError, setEmailError] = useState<string>('')
   const [password, setPassword] = useState<string>('test')
@@ -46,6 +48,7 @@ export const LoginForm = () => {
         if (token && user) {
           localStorage.setItem('token', token)
           setUserData(user)
+          router.push('/')
         }
       }
     }
@@ -74,6 +77,7 @@ export const LoginForm = () => {
       sx={{
         width: 300,
         height: 200,
+        margin: '0 auto',
         padding: '20px',
         border: '1px solid #eee',
         borderRadius: '5px',
