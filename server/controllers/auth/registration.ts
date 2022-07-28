@@ -10,13 +10,12 @@ import { Token } from '../../models/token'
 import { User } from '../../models/user'
 import { generateTokens } from '../../services/token'
 import { getUserDevice } from '../../utils/user-agent-parser'
-import { validateBuilder } from '../../utils/validation'
+import { getValidationErrors, validateBuilder } from '../../utils/validation'
 
 export const registration = async (
   req: NextApiRequest,
   res: NextApiResponse<RegistrationRes | Error>
 ) => {
-  // TODO: validation
   const data: RegistrationReq = req.body
 
   const email = validateBuilder(
@@ -32,15 +31,12 @@ export const registration = async (
     'Please, enter strong password'
   )
 
-  if (!email.isValid || !password.isValid) {
+  const validationErrors = getValidationErrors([email, password])
+
+  if (validationErrors.length > 0) {
     res.status(400).json({
       message: 'Validation error',
-      validationErrors: [email, password]
-        .filter((validationResult) => !validationResult.isValid)
-        .map((validationResult) => ({
-          fieldName: validationResult.fieldName,
-          message: validationResult.message
-        }))
+      validationErrors
     })
   }
 

@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import cookie from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
+import validator from 'validator'
 
 import { RegistrationReq, RegistrationRes } from '../../../dtos/auth'
 import { Error } from '../../../dtos/error'
@@ -9,13 +10,29 @@ import { Token } from '../../models/token'
 import { User } from '../../models/user'
 import { generateTokens } from '../../services/token'
 import { getUserDevice } from '../../utils/user-agent-parser'
+import { getValidationErrors, validateBuilder } from '../../utils/validation'
 
 export const login = async (
   req: NextApiRequest,
   res: NextApiResponse<RegistrationRes | Error>
 ) => {
-  // TODO: validation
   const data: RegistrationReq = req.body
+
+  const email = validateBuilder(
+    'email',
+    data?.email,
+    validator.isEmail,
+    'Please, enter correct email'
+  )
+
+  const validationErrors = getValidationErrors([email])
+
+  if (validationErrors.length > 0) {
+    res.status(400).json({
+      message: 'Validation error',
+      validationErrors
+    })
+  }
 
   try {
     const user = await User.findOne({ where: { email: data?.email } })

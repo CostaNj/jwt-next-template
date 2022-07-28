@@ -14,3 +14,12 @@ export const validateBuilder = (
   isValid: validate(value),
   message
 })
+
+export const getValidationErrors = (fields: Validator[]) => {
+  return fields
+    .filter((validationResult) => !validationResult.isValid)
+    .map((validationResult) => ({
+      fieldName: validationResult.fieldName,
+      message: validationResult.message
+    }))
+}
