@@ -19,10 +19,10 @@ export const validationErrorHandler = (
   })
 }
 
-export const errorHandler = (fields?: Field[]) => (axiosError: AxiosError) => {
+export const errorHandler = (fields?: Field[]) => (axiosError: AxiosError<Error>) => {
   if (axiosError) {
     const status = axiosError?.response?.status
-    const error = axiosError?.response?.data as Error
+    const error = axiosError?.response?.data
     if (status === 400 && error) {
       const validationErrors = error?.validationErrors
       if (fields && validationErrors) {

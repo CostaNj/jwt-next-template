@@ -1,5 +1,7 @@
 import { ChangeEvent, useCallback, useState } from 'react'
 import { AxiosError, AxiosResponse } from 'axios'
+import { LoginRes, RegistrationRes } from '../../dtos/auth'
+import { Error } from '../../dtos/error'
 import { useMutation } from 'react-query'
 import { useRouter } from 'next/router'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -17,7 +19,7 @@ export const LoginForm = () => {
   const [password, setPassword] = useState<string>('test')
   const [passwordError, setPasswordError] = useState<string>('')
 
-  const { mutate: registrationMutate, isLoading: registrationLoading } = useMutation<AxiosResponse, AxiosError>(
+  const { mutate: registrationMutate, isLoading: registrationLoading } = useMutation<AxiosResponse<RegistrationRes>, AxiosError<Error>>(
     'registration',
     async () => await registration(email, password),
     {
@@ -38,7 +40,7 @@ export const LoginForm = () => {
     }
   )
 
-  const { mutate: loginMutate, isLoading: loginLoading } = useMutation(
+  const { mutate: loginMutate, isLoading: loginLoading } = useMutation<AxiosResponse<LoginRes>, AxiosError<Error>>(
     'login',
     async () => await login(email, password),
     {
@@ -50,7 +52,10 @@ export const LoginForm = () => {
           setUserData(user)
           router.push('/')
         }
-      }
+      },
+      onError: errorHandler([
+        { fieldName: 'email', setError: setEmailError }
+      ])
     }
   )
 
