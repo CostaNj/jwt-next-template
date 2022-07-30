@@ -1,18 +1,13 @@
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, TextField } from '@mui/material'
-import { AxiosError, AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useCallback, useState } from 'react'
-import { useMutation } from 'react-query'
 
-import { LoginRes, RegistrationRes } from '../../dtos/auth'
-import { Error } from '../../dtos/error'
-import { login, registration } from '../api/auth'
-import { useAppContext } from '../context'
+import { useLogin } from '../hooks/login'
+import { useRegistration } from '../hooks/registration'
 import { errorHandler } from '../utils/error-handlers'
 
 export const LoginForm = () => {
-  const { setUserData } = useAppContext()
   const router = useRouter()
   const [email, setEmail] = useState<string>('test@test6.ru')
   const [emailError, setEmailError] = useState<string>('')
@@ -20,19 +15,12 @@ export const LoginForm = () => {
   const [passwordError, setPasswordError] = useState<string>('')
 
   const { mutate: registrationMutate, isLoading: registrationLoading } =
-    useMutation<AxiosResponse<RegistrationRes>, AxiosError<Error>>(
-      'registration',
-      async () => await registration(email, password),
+    useRegistration(
+      { email, password },
       {
-        onSuccess: (response) => {
-          const token = response?.data?.accessToken
-          const user = response?.data?.user
-          if (token && user) {
-            localStorage.setItem('token', token)
-            setUserData(user)
-            setEmail('')
-            setPassword('')
-          }
+        onSuccess: () => {
+          setEmail('')
+          setPassword('')
         },
         onError: errorHandler([
           { fieldName: 'email', setError: setEmailError },
@@ -41,21 +29,15 @@ export const LoginForm = () => {
       }
     )
 
-  const { mutate: loginMutate, isLoading: loginLoading } = useMutation<
-    AxiosResponse<LoginRes>,
-    AxiosError<Error>
-  >('login', async () => await login(email, password), {
-    onSuccess: (response) => {
-      const token = response?.data?.accessToken
-      const user = response?.data?.user
-      if (token && user) {
-        localStorage.setItem('token', token)
-        setUserData(user)
+  const { mutate: loginMutate, isLoading: loginLoading } = useLogin(
+    { email, password },
+    {
+      onSuccess: () => {
         router.push('/')
-      }
-    },
-    onError: errorHandler([{ fieldName: 'email', setError: setEmailError }])
-  })
+      },
+      onError: errorHandler([{ fieldName: 'email', setError: setEmailError }])
+    }
+  )
 
   const handleClickRegistration = useCallback(() => {
     registrationMutate()
