@@ -34,7 +34,7 @@ export const registration = async (
   const validationErrors = getValidationErrors([email, password])
 
   if (validationErrors.length > 0) {
-    res.status(400).json({
+    return res.status(400).json({
       message: 'Validation error',
       validationErrors
     })
@@ -43,7 +43,7 @@ export const registration = async (
   try {
     const user = await User.findOne({ where: { email: data?.email } })
     if (user) {
-      res
+      return res
         .status(400)
         .json({ message: 'There is already a user with this email' })
     } else {
@@ -82,19 +82,19 @@ export const registration = async (
           )
         ])
 
-        res.status(200).json({
+        return res.status(200).json({
           user: publicUserData,
           accessToken: tokens.accessToken
         })
       } else {
         console.log("Can't generate tokens")
-        res
+        return res
           .status(400)
           .json({ message: 'Something went wrong, try again later' })
       }
     }
   } catch (error) {
     console.log(error)
-    res.status(400).json({ message: 'Something went wrong, try again later' })
+    return res.status(400).json({ message: 'Something went wrong, try again later' })
   }
 }

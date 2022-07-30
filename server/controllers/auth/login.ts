@@ -28,7 +28,7 @@ export const login = async (
   const validationErrors = getValidationErrors([email])
 
   if (validationErrors.length > 0) {
-    res.status(400).json({
+    return res.status(400).json({
       message: 'Validation error',
       validationErrors
     })
@@ -79,24 +79,24 @@ export const login = async (
             })
           ])
 
-          res.status(200).json({
+          return res.status(200).json({
             user: publicUserData,
             accessToken: tokens.accessToken
           })
         } else {
           console.log("Can't generate tokens")
-          res
+          return res
             .status(400)
             .json({ message: 'Something went wrong, try again later' })
         }
       } else {
-        res.status(400).json({ message: 'Wrong password' })
+        return res.status(400).json({ message: 'Wrong password' })
       }
     } else {
-      res.status(400).json({ message: 'There is no user with this email' })
+      return res.status(400).json({ message: 'There is no user with this email' })
     }
   } catch (error) {
     console.log(error)
-    res.status(400).json({ message: 'Something went wrong, try again later' })
+    return res.status(400).json({ message: 'Something went wrong, try again later' })
   }
 }
