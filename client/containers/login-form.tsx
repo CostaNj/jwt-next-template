@@ -1,12 +1,12 @@
-import { ChangeEvent, useCallback, useState } from 'react'
-import { AxiosError, AxiosResponse } from 'axios'
-import { LoginRes, RegistrationRes } from '../../dtos/auth'
-import { Error } from '../../dtos/error'
-import { useMutation } from 'react-query'
-import { useRouter } from 'next/router'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, TextField } from '@mui/material'
+import { AxiosError, AxiosResponse } from 'axios'
+import { useRouter } from 'next/router'
+import { ChangeEvent, useCallback, useState } from 'react'
+import { useMutation } from 'react-query'
 
+import { LoginRes, RegistrationRes } from '../../dtos/auth'
+import { Error } from '../../dtos/error'
 import { login, registration } from '../api/auth'
 import { useAppContext } from '../context'
 import { errorHandler } from '../utils/error-handlers'
@@ -19,45 +19,43 @@ export const LoginForm = () => {
   const [password, setPassword] = useState<string>('test')
   const [passwordError, setPasswordError] = useState<string>('')
 
-  const { mutate: registrationMutate, isLoading: registrationLoading } = useMutation<AxiosResponse<RegistrationRes>, AxiosError<Error>>(
-    'registration',
-    async () => await registration(email, password),
-    {
-      onSuccess: (response) => {
-        const token = response?.data?.accessToken
-        const user = response?.data?.user
-        if (token && user) {
-          localStorage.setItem('token', token)
-          setUserData(user)
-          setEmail('')
-          setPassword('')
-        }
-      },
-      onError: errorHandler([
-        { fieldName: 'email', setError: setEmailError },
-        { fieldName: 'password', setError: setPasswordError }
-      ])
-    }
-  )
+  const { mutate: registrationMutate, isLoading: registrationLoading } =
+    useMutation<AxiosResponse<RegistrationRes>, AxiosError<Error>>(
+      'registration',
+      async () => await registration(email, password),
+      {
+        onSuccess: (response) => {
+          const token = response?.data?.accessToken
+          const user = response?.data?.user
+          if (token && user) {
+            localStorage.setItem('token', token)
+            setUserData(user)
+            setEmail('')
+            setPassword('')
+          }
+        },
+        onError: errorHandler([
+          { fieldName: 'email', setError: setEmailError },
+          { fieldName: 'password', setError: setPasswordError }
+        ])
+      }
+    )
 
-  const { mutate: loginMutate, isLoading: loginLoading } = useMutation<AxiosResponse<LoginRes>, AxiosError<Error>>(
-    'login',
-    async () => await login(email, password),
-    {
-      onSuccess: (response) => {
-        const token = response?.data?.accessToken
-        const user = response?.data?.user
-        if (token && user) {
-          localStorage.setItem('token', token)
-          setUserData(user)
-          router.push('/')
-        }
-      },
-      onError: errorHandler([
-        { fieldName: 'email', setError: setEmailError }
-      ])
-    }
-  )
+  const { mutate: loginMutate, isLoading: loginLoading } = useMutation<
+    AxiosResponse<LoginRes>,
+    AxiosError<Error>
+  >('login', async () => await login(email, password), {
+    onSuccess: (response) => {
+      const token = response?.data?.accessToken
+      const user = response?.data?.user
+      if (token && user) {
+        localStorage.setItem('token', token)
+        setUserData(user)
+        router.push('/')
+      }
+    },
+    onError: errorHandler([{ fieldName: 'email', setError: setEmailError }])
+  })
 
   const handleClickRegistration = useCallback(() => {
     registrationMutate()

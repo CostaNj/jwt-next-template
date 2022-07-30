@@ -19,15 +19,16 @@ export const validationErrorHandler = (
   })
 }
 
-export const errorHandler = (fields?: Field[]) => (axiosError: AxiosError<Error>) => {
-  if (axiosError) {
-    const status = axiosError?.response?.status
-    const error = axiosError?.response?.data
-    if (status === 400 && error) {
-      const validationErrors = error?.validationErrors
-      if (fields && validationErrors) {
-        validationErrorHandler(fields, validationErrors)
+export const errorHandler =
+  (fields?: Field[]) => (axiosError: AxiosError<Error>) => {
+    if (axiosError) {
+      const status = axiosError?.response?.status
+      const error = axiosError?.response?.data
+      if (status === 400 && error) {
+        const validationErrors = error?.validationErrors
+        if (fields && validationErrors) {
+          validationErrorHandler(fields, validationErrors)
+        }
       }
     }
   }
-}

@@ -1,4 +1,9 @@
-import { RegistrationReq, RegistrationRes, LoginReq, LoginRes } from '../../dtos/auth'
+import {
+  LoginReq,
+  LoginRes,
+  RegistrationReq,
+  RegistrationRes
+} from '../../dtos/auth'
 import { useAxios } from '../axios'
 
 export const registration = async (email: string, password: string) => {

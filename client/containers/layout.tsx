@@ -1,12 +1,13 @@
-import React, { ReactNode, FC } from 'react'
-import NavBar from './nav-bar'
-import { useAppContext } from '../context'
+import React, { FC, ReactNode } from 'react'
 
-export const Layout: FC<{ children?: ReactNode}> = ({ children }) => {
+import { useAppContext } from '../context'
+import NavBar from './nav-bar'
+
+export const Layout: FC<{ children?: ReactNode }> = ({ children }) => {
   const { userData } = useAppContext()
   return (
     <div>
-      <NavBar user={userData}/>
+      <NavBar user={userData} />
       {children}
     </div>
   )

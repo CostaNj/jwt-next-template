@@ -93,10 +93,14 @@ export const login = async (
         return res.status(400).json({ message: 'Wrong password' })
       }
     } else {
-      return res.status(400).json({ message: 'There is no user with this email' })
+      return res
+        .status(400)
+        .json({ message: 'There is no user with this email' })
     }
   } catch (error) {
     console.log(error)
-    return res.status(400).json({ message: 'Something went wrong, try again later' })
+    return res
+      .status(400)
+      .json({ message: 'Something went wrong, try again later' })
   }
 }
