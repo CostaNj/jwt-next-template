@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt'
-import cookie from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
 import validator from 'validator'
 
@@ -8,7 +7,7 @@ import { Error } from '../../../dtos/error'
 import { PublicUserData } from '../../../dtos/user'
 import { Token } from '../../models/token'
 import { User } from '../../models/user'
-import { generateTokens } from '../../services/token'
+import { generateTokens, setCookieRefreshToken } from '../../services/token'
 import { getUserDevice } from '../../utils/user-agent-parser'
 import { getValidationErrors, validateBuilder } from '../../utils/validation'
 
@@ -67,20 +66,7 @@ export const registration = async (
         })
 
         // TODO: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
-        res.setHeader('Set-Cookie', [
-          cookie.serialize(
-            'refreshToken',
-            newRefreshToken.getDataValue('token'),
-            {
-              httpOnly: true,
-              secure: process.env.NODE_ENV !== 'development',
-              //Token with 30 days of expiration:
-              maxAge: 60 * 60 * 24 * 30,
-              sameSite: 'strict',
-              path: '/'
-            }
-          )
-        ])
+        setCookieRefreshToken(res, tokens.refreshToken)
 
         return res.status(200).json({
           user: publicUserData,

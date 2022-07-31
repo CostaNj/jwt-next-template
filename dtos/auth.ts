@@ -19,3 +19,8 @@ export type LoginRes = {
   user: PublicUserData
   accessToken: string
 }
+
+export type RefreshRes = {
+  user: PublicUserData
+  accessToken: string
+}

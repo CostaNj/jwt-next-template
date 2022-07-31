@@ -1,6 +1,7 @@
 import {
   LoginReq,
   LoginRes,
+  RefreshRes,
   RegistrationReq,
   RegistrationRes
 } from '../../dtos/auth'
@@ -15,3 +16,6 @@ export const login = async (email: string, password: string) => {
   const data: LoginReq = { email, password }
   return await useAxios.post<LoginRes>('/api/auth/login', data)
 }
+
+export const refresh = async () =>
+  await useAxios.get<RefreshRes>('/api/auth/refresh')
